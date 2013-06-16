@@ -25,6 +25,8 @@ package trees;
 import java.util.Collection;
 import java.util.Iterator;
 
+import static org.junit.Assert.*;
+
 /**
  * @author escherba
  *
@@ -67,37 +69,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         RIGHT
     }
 
-    /*
-    enum Arrow
-    {
-        VOID,
-        SELF,
-        LEFT,
-        RIGHT
-    }
-
-    private class Edge {
-        public Node parent;
-        public Arrow direction;
-
-        public Edge(Node node, Arrow moveTo) {
-            parent = node;
-            direction = moveTo;
-        }
-
-        public Node getChild() {
-            Node child = null;
-            if (direction == Arrow.SELF) {
-                child = parent;
-            } else if (direction == Arrow.LEFT) {
-                child = parent.left;
-            } else if (direction == Arrow.RIGHT) {
-                child = parent.right;
-            }
-            return child;
-        }
-    }
-    */
     private class Edge {
         public Node parent;
         public Node child;
@@ -298,7 +269,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     public int size() {
         return size;
     }
-
+    /*
     private void printKeysFrom(Node arg0) {
         if (arg0 != null) {
             printKeysFrom(arg0.left);
@@ -311,6 +282,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         printKeysFrom(root);
         System.out.println();
     }
+     */
 
     /* (non-Javadoc)
      * @see trees.Tree#toArray()
@@ -381,19 +353,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     }
 
     private Node findNode(E arg0) {
-        // iterative tree search
-        Node x = root;
-        while (x != null) {
-            int comparison = arg0.compareTo(x.value);
-            if (comparison < 0) {
-                x = x.left;
-            } else if (comparison > 0) {
-                x = x.right;
-            } else {
-                break;  // found the node
-            }
-        }
-        return x;
+        Edge e = findNodeWithParent(arg0);
+        return e == null ? null : e.child;
     }
 
     private Edge findNodeWithParent(E arg0) {

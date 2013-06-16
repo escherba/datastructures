@@ -30,7 +30,7 @@ public class BinarySearchTreeTest {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
         for (int i = 0; i < 10; i++) {
             bst.add(i);
-            bst.printKeys();
+            //bst.printKeys();
         }
         System.out.println("Starting removal");
         for (int i = 0; i < 10; i++) {
@@ -40,7 +40,7 @@ public class BinarySearchTreeTest {
                 assertTrue(bst.remove(i));
                 int expectedSize = 10 - (i/2+1);
                 System.out.println("Expected size: " + expectedSize);
-                bst.printKeys();
+                //bst.printKeys();
                 assertTrue(bst.size() == expectedSize);
             }
         }
