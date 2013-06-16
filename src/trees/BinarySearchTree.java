@@ -251,12 +251,12 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         } else if (z.right == null) {
             transplant(edge.parent, z.left, edge.direction);
         } else {
-            Node yp = findParentOfMinFrom(z.right);
-            Node y = yp.left;
-            if (yp != null) {
+            Edge ye = findMinWithParentFrom(z.right);
+            Node y = ye.child;
+            if (ye != null) {
                 // we do not keep parent information; z.right != y
                 // should be equivalent to: y.parent != z
-                transplant(yp, y.right, Arrow.LEFT);
+                transplant(ye.parent, y.right, ye.direction);
                 y.right = z.right;
                 //y.right.parent = y;
             }
@@ -335,28 +335,21 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public E findMin() {
-        Node x = findMinNodeFrom(root);
-        return x.value;
+        Edge e = findMinWithParentFrom(root);
+        return e.child.value;
     }
 
-    private Node findMinNodeFrom(Node arg0) {
-        Node nodeParent = findParentOfMinFrom(arg0);
-        Node node = (nodeParent == null) ? arg0 : nodeParent;
-        return node.left == null ? node : node.left;
-    }
-
-    private Node findParentOfMinFrom(Node arg0) {
+    private Edge findMinWithParentFrom(Node arg0) {
         if (arg0 == null) {
             throw new IllegalArgumentException();
         }
-        // tree minimum
         Node x = arg0;
         Node y = null; //trailing pointer
         while (x.left != null) {
             y = x;
             x = x.left;
         }
-        return y;
+        return new Edge(y, x, Arrow.LEFT);
     }
 
     /* (non-Javadoc)
@@ -364,17 +357,16 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public E findMax() {
-        Node x = findMaxNodeFrom(root);
-        return x.value;
+        Edge e = findMaxWithParentFrom(root);
+        return e.child.value;
     }
 
     private Node findMaxNodeFrom(Node arg0) {
-        Node nodeParent = findParentOfMaxFrom(arg0);
-        Node node = (nodeParent == null) ? arg0 : nodeParent;
-        return node.right == null ? node : node.right;
+        Edge e = findMaxWithParentFrom(arg0);
+        return e.child;
     }
 
-    private Node findParentOfMaxFrom(Node arg0) {
+    private Edge findMaxWithParentFrom(Node arg0) {
         if (arg0 == null) {
             throw new IllegalArgumentException();
         }
@@ -385,7 +377,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             y = x;
             x = x.right;
         }
-        return y;
+        return new Edge(y, x, Arrow.RIGHT);
     }
 
     private Node findNode(E arg0) {
