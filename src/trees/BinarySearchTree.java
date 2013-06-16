@@ -33,32 +33,32 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
 
     private Node root;
 
-	private class Node {
-		private E value;
-		public Node left;
-		public Node right;
-		
-		public Node(E arg0) throws IllegalArgumentException {
-			if (arg0 != null) {
-				value = arg0;
-			} else {
-				throw new IllegalArgumentException();
-			}
-		}
-		
-		public int numChildren() {
-			return ((left  == null ? 0 : 1) +
-				    (right == null ? 0 : 1));
-		}
-		
-		public Node getOnlyChild() throws IllegalStateException {
-			if (numChildren() == 1) {
-				return left == null ? right : left;
-			} else {
-				throw new IllegalStateException();
-			}
-		}
-	}
+    private class Node {
+        private E value;
+        public Node left;
+        public Node right;
+
+        public Node(E arg0) throws IllegalArgumentException {
+            if (arg0 != null) {
+                value = arg0;
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        public int numChildren() {
+            return ((left  == null ? 0 : 1) +
+                    (right == null ? 0 : 1));
+        }
+
+        public Node getOnlyChild() throws IllegalStateException {
+            if (numChildren() == 1) {
+                return left == null ? right : left;
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+    }
     enum Arrow
     {
         VOID,
@@ -109,16 +109,16 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         }
     }
 
-	/**
-	 * 
-	 */
-	public BinarySearchTree() {
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     *
+     */
+    public BinarySearchTree() {
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#add(java.lang.Object)
-	 */
+    /* (non-Javadoc)
+     * @see trees.Tree#add(java.lang.Object)
+     */
     @Override
     public boolean add(E arg0) {
 
@@ -156,11 +156,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         return true;
     }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#addAll(java.util.Collection)
-	 */
-	@Override
-	public boolean addAll(Collection<? extends E> arg0) {
+    /* (non-Javadoc)
+     * @see trees.Tree#addAll(java.util.Collection)
+     */
+    @Override
+    public boolean addAll(Collection<? extends E> arg0) {
 
         // TODO
         // Paul has a problem with his code here in that
@@ -168,59 +168,59 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         // some elements from the collection had been added.
         boolean addedSome = false;
         for (E e: arg0) {
-             if (add(e)) addedSome = true;
+            if (add(e)) addedSome = true;
         }
         return addedSome;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#clear()
-	 */
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
+    /* (non-Javadoc)
+     * @see trees.Tree#clear()
+     */
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
         root = null;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#contains(java.lang.Object)
-	 */
-	@Override
-	public boolean contains(Object arg0) {
+    /* (non-Javadoc)
+     * @see trees.Tree#contains(java.lang.Object)
+     */
+    @Override
+    public boolean contains(Object arg0) {
         E e = (E) arg0;
-		Node node = findNode(e);
+        Node node = findNode(e);
         return node != null;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#containsAll(java.util.Collection)
-	 */
-	@Override
-	public boolean containsAll(Collection arg0) {
-		for (Object o : arg0) {
+    /* (non-Javadoc)
+     * @see trees.Tree#containsAll(java.util.Collection)
+     */
+    @Override
+    public boolean containsAll(Collection arg0) {
+        for (Object o : arg0) {
             if (!contains(o)) {
                 return false;
             }
         }
         return true;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#isEmpty()
-	 */
-	@Override
-	public boolean isEmpty() {
-		return root == null;
-	}
+    /* (non-Javadoc)
+     * @see trees.Tree#isEmpty()
+     */
+    @Override
+    public boolean isEmpty() {
+        return root == null;
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#iterator()
-	 */
-	@Override
-	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see trees.Tree#iterator()
+     */
+    @Override
+    public Iterator<E> iterator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     private void transplant(Node up, Node v, Arrow direction) {
         if (up == null) {
@@ -235,11 +235,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         //if (v != null) v.parent = u.parent
     }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#remove(java.lang.Object)
-	 */
-	@Override
-	public boolean remove(Object arg0) {
+    /* (non-Javadoc)
+     * @see trees.Tree#remove(java.lang.Object)
+     */
+    @Override
+    public boolean remove(Object arg0) {
         E e = (E) arg0;
         Edge edge = findNodeWithParent(e);
         if (edge == null) {
@@ -266,38 +266,38 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         }
         size--;
         return true;
-	}
+    }
 
 
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#removeAll(java.util.Collection)
-	 */
-	@Override
-	public boolean removeAll(Collection arg0) {
+    /* (non-Javadoc)
+     * @see trees.Tree#removeAll(java.util.Collection)
+     */
+    @Override
+    public boolean removeAll(Collection arg0) {
         boolean removedSome = false;
-		for (Object o : arg0) {
+        for (Object o : arg0) {
             if (remove(o)) removedSome = true;
         }
         return removedSome;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#retainAll(java.util.Collection)
-	 */
-	@Override
-	public boolean retainAll(Collection arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    /* (non-Javadoc)
+     * @see trees.Tree#retainAll(java.util.Collection)
+     */
+    @Override
+    public boolean retainAll(Collection arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#size()
-	 */
-	@Override
-	public int size() {
-		return size;
-	}
+    /* (non-Javadoc)
+     * @see trees.Tree#size()
+     */
+    @Override
+    public int size() {
+        return size;
+    }
 
     private void printKeysFrom(Node arg0) {
         if (arg0 != null) {
@@ -312,32 +312,32 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         System.out.println();
     }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#toArray()
-	 */
-	@Override
-	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see trees.Tree#toArray()
+     */
+    @Override
+    public Object[] toArray() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#toArray(T[])
-	 */
-	@Override
-	public Object[] toArray(Object[] arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see trees.Tree#toArray(T[])
+     */
+    @Override
+    public Object[] toArray(Object[] arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#findMin()
-	 */
-	@Override
-	public E findMin() {
+    /* (non-Javadoc)
+     * @see trees.Tree#findMin()
+     */
+    @Override
+    public E findMin() {
         Node x = findMinNodeFrom(root);
         return x.value;
-	}
+    }
 
     private Node findMinNodeFrom(Node arg0) {
         Node nodeParent = findParentOfMinFrom(arg0);
@@ -359,14 +359,14 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         return y;
     }
 
-	/* (non-Javadoc)
-	 * @see trees.Tree#findMax()
-	 */
-	@Override
-	public E findMax() {
-		Node x = findMaxNodeFrom(root);
+    /* (non-Javadoc)
+     * @see trees.Tree#findMax()
+     */
+    @Override
+    public E findMax() {
+        Node x = findMaxNodeFrom(root);
         return x.value;
-	}
+    }
 
     private Node findMaxNodeFrom(Node arg0) {
         Node nodeParent = findParentOfMaxFrom(arg0);
