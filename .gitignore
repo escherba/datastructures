@@ -4,3 +4,11 @@
 *.jar
 *.war
 *.ear
+
+# various
+*.orig
+
+.classpath
+.idea/
+.project
+datastructures.iml
