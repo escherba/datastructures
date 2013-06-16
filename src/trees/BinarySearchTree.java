@@ -78,6 +78,16 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             child = nodeChild;
             direction = dir;
         }
+        public void moveLeft() {
+            parent = child;
+            child = child.left;
+            direction = Arrow.LEFT;
+        }
+        public void moveRight() {
+            parent = child;
+            child = child.right;
+            direction = Arrow.RIGHT;
+        }
     }
 
     /**
@@ -315,13 +325,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         if (arg0 == null) {
             throw new IllegalArgumentException();
         }
-        Node x = arg0;
-        Node y = null; //trailing pointer
-        while (x.left != null) {
-            y = x;
-            x = x.left;
+        Edge e = new Edge(null, arg0, Arrow.VOID);
+        while (e.child.left != null) {
+            e.moveLeft();
         }
-        return new Edge(y, x, Arrow.LEFT);
+        return e;
     }
 
     /* (non-Javadoc)
@@ -343,13 +351,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             throw new IllegalArgumentException();
         }
         // parent of tree maximum
-        Node x = arg0;
-        Node y = null;  // trailing pointer
-        while (x.right != null) {
-            y = x;
-            x = x.right;
+        Edge e = new Edge(null, arg0, Arrow.VOID);
+        while (e.child.right != null) {
+            e.moveRight();
         }
-        return new Edge(y, x, Arrow.RIGHT);
+        return e;
     }
 
     private Node findNode(E arg0) {
@@ -359,21 +365,15 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
 
     private Edge findNodeWithParent(E arg0) {
         // iterative tree search
-        Node x = root;
-        Node y = null;
-        Arrow direction = Arrow.VOID;
-        while (x != null) {
-            int comparison = arg0.compareTo(x.value);
+        Edge e = new Edge(null, root, Arrow.VOID);
+        while (e.child != null) {
+            int comparison = arg0.compareTo(e.child.value);
             if (comparison < 0) {
-                y = x;
-                x = x.left;
-                direction = Arrow.LEFT;
+                e.moveLeft();
             } else if (comparison > 0) {
-                y = x;
-                x = x.right;
-                direction = Arrow.RIGHT;
+                e.moveRight();
             } else {
-                return new Edge(y, x, direction);  // found the node
+                return e; // found the node
             }
         }
         return null;
