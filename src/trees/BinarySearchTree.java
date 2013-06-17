@@ -138,11 +138,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public boolean addAll(Collection<? extends E> arg0) {
-
-        // TODO
-        // Paul has a problem with his code here in that
-        // his implementation may return false despite the fact that
-        // some elements from the collection had been added.
         boolean addedSome = false;
         for (E e: arg0) {
             if (add(e)) addedSome = true;
