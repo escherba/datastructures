@@ -60,14 +60,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             return ((left  == null ? 0 : 1) +
                     (right == null ? 0 : 1));
         }
-
-        public Node getOnlyChild() throws IllegalStateException {
-            if (numChildren() == 1) {
-                return left == null ? right : left;
-            } else {
-                throw new IllegalStateException();
-            }
-        }
     }
 
     private class Edge {
