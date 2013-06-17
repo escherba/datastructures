@@ -104,31 +104,27 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     public boolean add(E arg0) {
 
         // return true if collection has been modified, false otherwise
-
-        Node x = root;           // current pointer
-        Node y = null;           // trailing pointer (parent of x)
         Node z = new Node(arg0); // node to insert
 
-        while (x != null) {
-            y = x;
-            int comparison = arg0.compareTo(x.value);
+        Edge e = new Edge(null, root, Arrow.VOID);
+        while (e.child != null) {
+            int comparison = arg0.compareTo(e.child.value);
             if (comparison < 0) {          // arg0 <  x.value
-                x = x.left;
+                e.moveLeft();
             } else if (comparison > 0) {   // arg0 >= x.value
-                x = x.right;
+                e.moveRight();
             } else {
                 return false;              // arg0 == x.value
             }
         }
-        //z.parent = y;
-        if (y == null) {
+        if (e.parent == null) {
             root = z; // tree was empty
         } else {
-            int comparison = arg0.compareTo(y.value);
+            int comparison = arg0.compareTo(e.parent.value);
             if (comparison < 0) {          // arg0 <  y.value
-                y.left  = z;
+                e.parent.left  = z;
             } else if (comparison > 0) {   // arg0 >= y.value
-                y.right = z;
+                e.parent.right = z;
             } else {
                 return false;              // arg0 == y.value
             }
@@ -203,17 +199,16 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         return null;
     }
 
-    private void transplant(Node up, Node v, Arrow direction) {
-        if (up == null) {
+    private void transplant(Edge e, Node v) {
+        if (e.parent == null) {
             root = v;
-        } else if (direction == Arrow.LEFT) {
-            up.left = v;
-        } else if (direction == Arrow.RIGHT) {
-            up.right = v;
+        } else if (e.direction == Arrow.LEFT) {
+            e.parent.left = v;
+        } else if (e.direction == Arrow.RIGHT) {
+            e.parent.right = v;
         } else {
             throw new IllegalArgumentException();
         }
-        //if (v != null) v.parent = u.parent
     }
 
     /* (non-Javadoc)
@@ -222,34 +217,28 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     @Override
     public boolean remove(Object arg0) {
         E e = (E) arg0;
-        Edge edge = findNodeWithParent(e);
-        if (edge == null) {
+        Edge ze = findNodeWithParent(e);
+        if (ze == null) {
             return false;   // value not found in tree
         }
-        Node z = edge.child;
+        Node z = ze.child;
         if (z.left == null) {
-            transplant(edge.parent, z.right, edge.direction);
+            transplant(ze, z.right);
         } else if (z.right == null) {
-            transplant(edge.parent, z.left, edge.direction);
+            transplant(ze, z.left);
         } else {
             Edge ye = findMinWithParentFrom(z.right);
             Node y = ye.child;
-            if (ye != null) {
-                // we do not keep parent information; z.right != y
-                // should be equivalent to: y.parent != z
-                transplant(ye.parent, y.right, ye.direction);
+            if (ye.parent != z) {
+                transplant(ye, y.right);
                 y.right = z.right;
-                //y.right.parent = y;
             }
-            transplant(edge.parent, y, edge.direction);
+            transplant(ze, y);
             y.left = z.left;
-            //y.left.parent = y;
         }
         size--;
         return true;
     }
-
-
 
     /* (non-Javadoc)
      * @see trees.Tree#removeAll(java.util.Collection)
@@ -279,20 +268,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     public int size() {
         return size;
     }
-    /*
-    private void printKeysFrom(Node arg0) {
-        if (arg0 != null) {
-            printKeysFrom(arg0.left);
-            System.out.print(arg0.value + ",");
-            printKeysFrom(arg0.right);
-        }
-    }
-    public void printKeys() {
-        System.out.println("Current size: " + size());
-        printKeysFrom(root);
-        System.out.println();
-    }
-     */
 
     /* (non-Javadoc)
      * @see trees.Tree#toArray()
