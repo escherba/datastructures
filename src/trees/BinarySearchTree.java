@@ -25,8 +25,6 @@ package trees;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static org.junit.Assert.*;
-
 /**
  * @author escherba
  *
@@ -38,7 +36,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     enum Arrow
     {
         VOID,
-        SELF,
         LEFT,
         RIGHT
     }
@@ -54,11 +51,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             } else {
                 throw new IllegalArgumentException();
             }
-        }
-
-        public int numChildren() {
-            return ((left  == null ? 0 : 1) +
-                    (right == null ? 0 : 1));
         }
     }
 
@@ -195,7 +187,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         } else if (e.direction == Arrow.RIGHT) {
             e.parent.right = v;
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
     }
 
@@ -283,7 +275,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#toArray(T[])
      */
     @Override
-    public Object[] toArray(Object[] values) {
+    public <T> T[] toArray(T[] values) {
         // TODO Auto-generated method stub
         return null;
     }
