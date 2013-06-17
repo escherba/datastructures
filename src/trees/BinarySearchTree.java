@@ -222,7 +222,9 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             transplant(ze, z.right);
         } else if (z.right == null) {
             transplant(ze, z.left);
-        } else {
+        } else if (size % 2 == 0) {
+            // find successor of z -- vary between successor
+            // and predecessor depending on tree size
             Edge ye = findMinWithParentFrom(z.right);
             Node y = ye.child;
             if (y != z.right) {  // ye.parent != z
@@ -231,6 +233,17 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             }
             transplant(ze, y);
             y.left = z.left;
+        } else {
+            // find predecessor of z -- vary between successor
+            // and predecessor depending on tree size
+            Edge ye = findMaxWithParentFrom(z.left);
+            Node y = ye.child;
+            if (y != z.left) {  // ye.parent != z
+                transplant(ye, y.left);
+                y.left = z.left;
+            }
+            transplant(ze, y);
+            y.right = z.right;
         }
         size--;
         return true;
