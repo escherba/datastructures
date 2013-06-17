@@ -153,8 +153,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     @Override
     public boolean contains(Object value) {
         E e = (E) value;
-        Node node = findNode(e);
-        return node != null;
+        Edge edg = findNodeWithParent(e);
+        return edg != null;
     }
 
     /* (non-Javadoc)
@@ -320,11 +320,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
             e.moveRight();
         }
         return e;
-    }
-
-    private Node findNode(E value) {
-        Edge e = findNodeWithParent(value);
-        return e == null ? null : e.child;
     }
 
     private Edge findNodeWithParent(E value) {
