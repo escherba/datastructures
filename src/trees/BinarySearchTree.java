@@ -35,14 +35,22 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
 
     private Node root;
 
+    enum Arrow
+    {
+        VOID,
+        SELF,
+        LEFT,
+        RIGHT
+    }
+
     private class Node {
         private E value;
         public Node left;
         public Node right;
 
-        public Node(E arg0) throws IllegalArgumentException {
-            if (arg0 != null) {
-                value = arg0;
+        public Node(E val) throws IllegalArgumentException {
+            if (val != null) {
+                value = val;
             } else {
                 throw new IllegalArgumentException();
             }
@@ -60,13 +68,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
                 throw new IllegalStateException();
             }
         }
-    }
-    enum Arrow
-    {
-        VOID,
-        SELF,
-        LEFT,
-        RIGHT
     }
 
     private class Edge {
@@ -101,14 +102,14 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#add(java.lang.Object)
      */
     @Override
-    public boolean add(E arg0) {
+    public boolean add(E value) {
 
         // return true if collection has been modified, false otherwise
-        Node z = new Node(arg0); // node to insert
+        Node z = new Node(value); // node to insert
 
         Edge e = new Edge(null, root, Arrow.VOID);
         while (e.child != null) {
-            int comparison = arg0.compareTo(e.child.value);
+            int comparison = value.compareTo(e.child.value);
             if (comparison < 0) {          // arg0 <  x.value
                 e.moveLeft();
             } else if (comparison > 0) {   // arg0 >= x.value
@@ -120,7 +121,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         if (e.parent == null) {
             root = z; // tree was empty
         } else {
-            int comparison = arg0.compareTo(e.parent.value);
+            int comparison = value.compareTo(e.parent.value);
             if (comparison < 0) {          // arg0 <  y.value
                 e.parent.left  = z;
             } else if (comparison > 0) {   // arg0 >= y.value
@@ -137,10 +138,10 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#addAll(java.util.Collection)
      */
     @Override
-    public boolean addAll(Collection<? extends E> arg0) {
+    public boolean addAll(Collection<? extends E> values) {
         boolean addedSome = false;
-        for (E e: arg0) {
-            if (add(e)) addedSome = true;
+        for (E value: values) {
+            if (add(value)) addedSome = true;
         }
         return addedSome;
     }
@@ -158,8 +159,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#contains(java.lang.Object)
      */
     @Override
-    public boolean contains(Object arg0) {
-        E e = (E) arg0;
+    public boolean contains(Object value) {
+        E e = (E) value;
         Node node = findNode(e);
         return node != null;
     }
@@ -168,9 +169,9 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#containsAll(java.util.Collection)
      */
     @Override
-    public boolean containsAll(Collection arg0) {
-        for (Object o : arg0) {
-            if (!contains(o)) {
+    public boolean containsAll(Collection values) {
+        for (Object value : values) {
+            if (!contains(value)) {
                 return false;
             }
         }
@@ -210,8 +211,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#remove(java.lang.Object)
      */
     @Override
-    public boolean remove(Object arg0) {
-        E e = (E) arg0;
+    public boolean remove(Object value) {
+        E e = (E) value;
         Edge ze = findNodeWithParent(e);
         if (ze == null) {
             return false;   // value not found in tree
@@ -224,7 +225,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         } else {
             Edge ye = findMinWithParentFrom(z.right);
             Node y = ye.child;
-            if (ye.parent != z) {
+            if (y != z.right) {  // ye.parent != z
                 transplant(ye, y.right);
                 y.right = z.right;
             }
@@ -239,10 +240,10 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#removeAll(java.util.Collection)
      */
     @Override
-    public boolean removeAll(Collection arg0) {
+    public boolean removeAll(Collection values) {
         boolean removedSome = false;
-        for (Object o : arg0) {
-            if (remove(o)) removedSome = true;
+        for (Object value : values) {
+            if (remove(value)) removedSome = true;
         }
         return removedSome;
     }
@@ -251,7 +252,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#retainAll(java.util.Collection)
      */
     @Override
-    public boolean retainAll(Collection arg0) {
+    public boolean retainAll(Collection values) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -277,7 +278,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#toArray(T[])
      */
     @Override
-    public Object[] toArray(Object[] arg0) {
+    public Object[] toArray(Object[] values) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -291,11 +292,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         return e.child.value;
     }
 
-    private Edge findMinWithParentFrom(Node arg0) {
-        if (arg0 == null) {
+    private Edge findMinWithParentFrom(Node node) {
+        if (node == null) {
             throw new IllegalArgumentException();
         }
-        Edge e = new Edge(null, arg0, Arrow.VOID);
+        Edge e = new Edge(null, node, Arrow.VOID);
         while (e.child.left != null) {
             e.moveLeft();
         }
@@ -311,33 +312,27 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         return e.child.value;
     }
 
-    private Node findMaxNodeFrom(Node arg0) {
-        Edge e = findMaxWithParentFrom(arg0);
-        return e.child;
-    }
-
-    private Edge findMaxWithParentFrom(Node arg0) {
-        if (arg0 == null) {
+    private Edge findMaxWithParentFrom(Node node) {
+        if (node == null) {
             throw new IllegalArgumentException();
         }
-        // parent of tree maximum
-        Edge e = new Edge(null, arg0, Arrow.VOID);
+        Edge e = new Edge(null, node, Arrow.VOID);
         while (e.child.right != null) {
             e.moveRight();
         }
         return e;
     }
 
-    private Node findNode(E arg0) {
-        Edge e = findNodeWithParent(arg0);
+    private Node findNode(E value) {
+        Edge e = findNodeWithParent(value);
         return e == null ? null : e.child;
     }
 
-    private Edge findNodeWithParent(E arg0) {
+    private Edge findNodeWithParent(E value) {
         // iterative tree search
         Edge e = new Edge(null, root, Arrow.VOID);
         while (e.child != null) {
-            int comparison = arg0.compareTo(e.child.value);
+            int comparison = value.compareTo(e.child.value);
             if (comparison < 0) {
                 e.moveLeft();
             } else if (comparison > 0) {
@@ -348,5 +343,4 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         }
         return null;
     }
-
 }
