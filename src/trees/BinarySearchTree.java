@@ -298,9 +298,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     }
 
     private Edge findMinWithParentFrom(Node node) {
-        if (node == null) {
-            throw new IllegalArgumentException();
-        }
         Edge e = new Edge(null, node, Arrow.VOID);
         while (e.child.left != null) {
             e.moveLeft();
@@ -318,9 +315,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     }
 
     private Edge findMaxWithParentFrom(Node node) {
-        if (node == null) {
-            throw new IllegalArgumentException();
-        }
         Edge e = new Edge(null, node, Arrow.VOID);
         while (e.child.right != null) {
             e.moveRight();
