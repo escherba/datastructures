@@ -28,6 +28,8 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.NoSuchElementException;
 
+// TODO implement NavigableSet interface
+
 /**
  * @author escherba
  *
@@ -314,9 +316,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
                  curr = curr.left;
              } else {
                  curr = stack.pop();
-                 // add curr to result array
-                 result[i] = curr.value;
-                 i++;
+                 result[i++] = curr.value;
                  curr = curr.right;
              }
         }
@@ -343,7 +343,6 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
                     curr = curr.left;
                 } else {
                     curr = stack.pop();
-                    // add curr to result array
                     values[i++] = (T)curr.value;
                     curr = curr.right;
                 }
