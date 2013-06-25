@@ -8,13 +8,10 @@ import java.util.TreeSet;
 import java.util.Iterator;
 
 /**
- * Created with IntelliJ IDEA.
- * User: escherba
- * Date: 6/15/13
- * Time: 8:10 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class BinarySearchTreeTest {
+
     @Test
     public void testAdd() throws Exception {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
@@ -90,7 +87,7 @@ public class BinarySearchTreeTest {
     public void testToArray() throws Exception {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
         Random randomGenerator = new Random();
-        TreeSet s = new TreeSet();
+        TreeSet<Integer> s = new TreeSet<Integer>();
         for (int idx = 0; idx < 100; idx++){
             int randomInt = randomGenerator.nextInt(100);
             bst.add(randomInt);
@@ -103,7 +100,7 @@ public class BinarySearchTreeTest {
     public void testToArray2() throws Exception {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
         Random randomGenerator = new Random();
-        TreeSet s = new TreeSet();
+        TreeSet<Integer> s = new TreeSet<Integer>();
         for (int idx = 0; idx < 100; idx++){
             int randomInt = randomGenerator.nextInt(100);
             bst.add(randomInt);
@@ -125,7 +122,7 @@ public class BinarySearchTreeTest {
     public void testIterator() throws Exception {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
         Random randomGenerator = new Random();
-        TreeSet s = new TreeSet();
+        TreeSet<Integer> s = new TreeSet<Integer>();
         // populate tree with some random values
         for (int idx = 0; idx < 100; idx++){
             int randomInt = randomGenerator.nextInt(100);
@@ -134,11 +131,9 @@ public class BinarySearchTreeTest {
         }
         Object[] arr1 = s.toArray();
         Iterator itr = bst.iterator();
-        int i = 0;
-        while (itr.hasNext()) {
+        for (int i = 0; itr.hasNext(); i++) {
             Integer el = (Integer)itr.next();
             assertTrue(el == arr1[i]);
-            i++;
         }
     }
 
@@ -146,20 +141,17 @@ public class BinarySearchTreeTest {
     public void testIteratorRemove() throws Exception {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
         Random randomGenerator = new Random();
-        TreeSet s = new TreeSet();
+        TreeSet<Integer> s = new TreeSet<Integer>();
         // populate tree with some random values
         for (int idx = 0; idx < 100; idx++){
             int randomInt = randomGenerator.nextInt(100);
             bst.add(randomInt);
             s.add(randomInt);
         }
-        Object[] arr1 = s.toArray();
-        Iterator itr = bst.iterator();
 
         // remove all values through the iterator
-        while (itr.hasNext()) {
+        for (Iterator itr = bst.iterator(); itr.hasNext(); itr.next()) {
             itr.remove();
-            Integer el = (Integer)itr.next();
         }
         assertTrue(bst.size() == 0);
     }

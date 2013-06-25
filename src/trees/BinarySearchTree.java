@@ -22,6 +22,8 @@ THE SOFTWARE.
 
 package trees;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Deque;
@@ -124,8 +126,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
     }
 
     /* (non-Javadoc)
-     * @see trees.Tree#addAll(java.util.Collection)
-     */
+         * @see trees.Tree#addAll(java.util.Collection)
+         */
     @Override
     public boolean addAll(Collection<? extends E> values) {
         boolean addedSome = false;
@@ -179,6 +181,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#iterator()
      */
     @Override
+    @NotNull
     public Iterator<E> iterator() {
 
         final Object[] arr = toArray();
@@ -201,7 +204,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
 
             @Override
             public void remove() {
-                self.remove((E)arr[currentIndex]);
+                self.remove(arr[currentIndex]);
             }
         };
     }
@@ -304,57 +307,46 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      * @see trees.Tree#toArray()
      */
     @Override
+    @NotNull
     public Object[] toArray() {
-        // perform in-order traversal starting from root
-        Object[] result = new Object[size];
-        Deque<Node> stack = new ArrayDeque<Node>();
-        Node curr = root;
-        int i = 0;
-        while (!stack.isEmpty() || curr != null) {
-             if (curr != null) {
-                 stack.push(curr);
-                 curr = curr.left;
-             } else {
-                 curr = stack.pop();
-                 result[i++] = curr.value;
-                 curr = curr.right;
-             }
-        }
-        return result;
+        return toArray(new Object[0]);
     }
 
     /* (non-Javadoc)
      * @see trees.Tree#toArray(T[])
      */
     @Override
+    @NotNull
     public <T> T[] toArray(T[] values) {
         if (values == null) {
             throw new NullPointerException();
         }
 
         int bufferSize = values.length;
-        if (size <= bufferSize) {
-            Deque<Node> stack = new ArrayDeque<Node>();
-            Node curr = root;
-            int i = 0;
-            while (!stack.isEmpty() || curr != null) {
-                if (curr != null) {
-                    stack.push(curr);
-                    curr = curr.left;
-                } else {
-                    curr = stack.pop();
-                    values[i++] = (T)curr.value;
-                    curr = curr.right;
-                }
-            }
-            if (i < bufferSize) {
-                // pad with a null value
-                values[i] = null;
-            }
-            return values;
-        } else {
-            return (T[])toArray();
+        if (size > bufferSize) {
+            values = (T[])new Object[size];
         }
+
+        // perform in-order tree traversal starting from root
+        Deque<Node> stack = new ArrayDeque<Node>();
+        Node curr = root;
+        int i = 0;
+        while (!stack.isEmpty() || curr != null) {
+            if (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
+            } else {
+                curr = stack.pop();
+                values[i++] = (T)curr.value;
+                curr = curr.right;
+            }
+        }
+
+        // pad with a null value if source array is larger
+        if (i < bufferSize) {
+            values[i] = null;
+        }
+        return values;
     }
 
     /* (non-Javadoc)
