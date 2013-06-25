@@ -2,6 +2,10 @@ package trees;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+import java.util.Random;
+import java.util.Arrays;
+import java.util.TreeSet;
+import java.util.Iterator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -60,7 +64,7 @@ public class BinarySearchTreeTest {
         BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
         for (int i = 99; i > 0; i--) {
             bst.add(i);
-            int minCheck = bst.findMin();
+            //int minCheck = bst.findMin();
             assertTrue(bst.findMin() == i);
         }
         for (int i = 0; i < 99; i++) {
@@ -80,5 +84,83 @@ public class BinarySearchTreeTest {
             bst.remove(i);
             assertTrue(bst.findMax() == i-1);
         }
+    }
+
+    @Test
+    public void testToArray() throws Exception {
+        BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
+        Random randomGenerator = new Random();
+        TreeSet s = new TreeSet();
+        for (int idx = 0; idx < 100; idx++){
+            int randomInt = randomGenerator.nextInt(100);
+            bst.add(randomInt);
+            s.add(randomInt);
+        }
+        assertTrue(Arrays.equals(s.toArray(), bst.toArray()));
+    }
+
+    @Test
+    public void testToArray2() throws Exception {
+        BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
+        Random randomGenerator = new Random();
+        TreeSet s = new TreeSet();
+        for (int idx = 0; idx < 100; idx++){
+            int randomInt = randomGenerator.nextInt(100);
+            bst.add(randomInt);
+            s.add(randomInt);
+        }
+        Object[] arr1 = s.toArray();
+        Integer[] arr2 = bst.toArray(new Integer[1000]);
+        boolean arraysDiffer = false;
+        for (int i = 0; i < arr1.length; i++) {
+            if (arr1[i] != arr2[i]) {
+                arraysDiffer = true;
+                break;
+            }
+        }
+        assertTrue(!arraysDiffer);
+    }
+
+    @Test
+    public void testIterator() throws Exception {
+        BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
+        Random randomGenerator = new Random();
+        TreeSet s = new TreeSet();
+        // populate tree with some random values
+        for (int idx = 0; idx < 100; idx++){
+            int randomInt = randomGenerator.nextInt(100);
+            bst.add(randomInt);
+            s.add(randomInt);
+        }
+        Object[] arr1 = s.toArray();
+        Iterator itr = bst.iterator();
+        int i = 0;
+        while (itr.hasNext()) {
+            Integer el = (Integer)itr.next();
+            assertTrue(el == arr1[i]);
+            i++;
+        }
+    }
+
+    @Test
+    public void testIteratorRemove() throws Exception {
+        BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
+        Random randomGenerator = new Random();
+        TreeSet s = new TreeSet();
+        // populate tree with some random values
+        for (int idx = 0; idx < 100; idx++){
+            int randomInt = randomGenerator.nextInt(100);
+            bst.add(randomInt);
+            s.add(randomInt);
+        }
+        Object[] arr1 = s.toArray();
+        Iterator itr = bst.iterator();
+
+        // remove all values through the iterator
+        while (itr.hasNext()) {
+            itr.remove();
+            Integer el = (Integer)itr.next();
+        }
+        assertTrue(bst.size() == 0);
     }
 }

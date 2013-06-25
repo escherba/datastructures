@@ -24,6 +24,9 @@ package trees;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.util.NoSuchElementException;
 
 /**
  * @author escherba
@@ -45,12 +48,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
         public Node left;
         public Node right;
 
-        public Node(E val) throws IllegalArgumentException {
-            if (val != null) {
-                value = val;
-            } else {
-                throw new IllegalArgumentException();
+        public Node(E val) throws NullPointerException {
+            if (val == null) {
+                throw new NullPointerException();
             }
+            value = val;
         }
     }
 
@@ -79,7 +81,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      *
      */
     public BinarySearchTree() {
-        // TODO Auto-generated constructor stub
+        root = null;
+        size = 0;
     }
 
     /* (non-Javadoc)
@@ -135,8 +138,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
         root = null;
+        size = 0;
     }
 
     /* (non-Javadoc)
@@ -175,8 +178,30 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+
+        final Object[] arr = toArray();
+        final int arrLength = arr.length;
+        final BinarySearchTree<E> self = this;
+
+        return new Iterator<E>() {
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < arrLength;
+            }
+
+            @Override
+            public E next() {
+                if (! hasNext()) throw new NoSuchElementException();
+                return (E)arr[currentIndex++];
+            }
+
+            @Override
+            public void remove() {
+                self.remove((E)arr[currentIndex]);
+            }
+        };
     }
 
     private void transplant(Edge e, Node v) {
@@ -250,8 +275,19 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public boolean retainAll(Collection values) {
-        // TODO Auto-generated method stub
-        return false;
+        if (values == null) {
+            throw new NullPointerException();
+        }
+        E[] els = (E[])toArray();
+        boolean modified = false;
+        for (E el : els) {
+            if (!values.contains(el)) {
+                if (remove(el)) {
+                    modified = true;
+                }
+            }
+        }
+        return modified;
     }
 
     /* (non-Javadoc)
@@ -267,8 +303,24 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public Object[] toArray() {
-        // TODO Auto-generated method stub
-        return null;
+        // perform in-order traversal starting from root
+        Object[] result = new Object[size];
+        Deque<Node> stack = new ArrayDeque<Node>();
+        Node curr = root;
+        int i = 0;
+        while (!stack.isEmpty() || curr != null) {
+             if (curr != null) {
+                 stack.push(curr);
+                 curr = curr.left;
+             } else {
+                 curr = stack.pop();
+                 // add curr to result array
+                 result[i] = curr.value;
+                 i++;
+                 curr = curr.right;
+             }
+        }
+        return result;
     }
 
     /* (non-Javadoc)
@@ -276,8 +328,34 @@ public class BinarySearchTree<E extends Comparable<E>> extends Tree<E> {
      */
     @Override
     public <T> T[] toArray(T[] values) {
-        // TODO Auto-generated method stub
-        return null;
+        if (values == null) {
+            throw new NullPointerException();
+        }
+
+        int bufferSize = values.length;
+        if (size <= bufferSize) {
+            Deque<Node> stack = new ArrayDeque<Node>();
+            Node curr = root;
+            int i = 0;
+            while (!stack.isEmpty() || curr != null) {
+                if (curr != null) {
+                    stack.push(curr);
+                    curr = curr.left;
+                } else {
+                    curr = stack.pop();
+                    // add curr to result array
+                    values[i++] = (T)curr.value;
+                    curr = curr.right;
+                }
+            }
+            if (i < bufferSize) {
+                // pad with a null value
+                values[i] = null;
+            }
+            return values;
+        } else {
+            return (T[])toArray();
+        }
     }
 
     /* (non-Javadoc)
